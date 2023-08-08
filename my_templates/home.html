@@ -1,0 +1,290 @@
+{% load static %}
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>
+        INFO CLIPS
+    </title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/css/bootstrap.min.css" rel="stylesheet"
+    integrity="sha384-aFq/bzH65dt+w6FI2ooMVUpc+21e0SRygnTpmBvdBgSdnuTN7QbdgL+OapgHtvPp" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'h.css' %}">   
+</head>
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-light">
+        <div class="container-fluid">
+          <a class="navbar-brand" href="{% url 'script' %}">INFOCLIPS</a>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+          </button>
+          <div class="collapse navbar-collapse justify-content-end" id="navbarNav">
+            <ul class="navbar-nav">
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'script' %}">Home</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'summy' %}">Text Summarizer</a>
+              </li>
+              <li class="nav-item">
+                <a class="nav-link" href="{% url 'team' %}">Our Team</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </nav>
+      
+      <style>
+      .navbar {
+        background-color: white;
+        box-shadow: none;
+      }
+      
+      .navbar-brand {
+        font-size: 24px;
+        font-weight: bold;
+        letter-spacing: 1px;
+      }
+      
+      .nav-link {
+        font-size: 16px;
+        font-weight: bold;
+        color: #666;
+        text-transform: uppercase;
+        margin-left: 24px;
+        position: relative;
+      }
+      
+      .nav-link:before {
+        content: "";
+        position: absolute;
+        width: 100%;
+        height: 2px;
+        bottom: 0;
+        left: 0;
+        background-color: #666;
+        visibility: hidden;
+        transform: scaleX(0);
+        transition: all 0.3s ease-in-out 0s;
+      }
+      
+      .nav-link:hover:before {
+        visibility: visible;
+        transform: scaleX(1);
+      }
+      
+      @media only screen and (max-width: 991px) {
+        .navbar-nav {
+          background-color: white;
+          padding-top: 24px;
+        }
+      
+        .nav-link {
+          margin: 0;
+          padding: 12px 24px;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+          display: block;
+          position: relative;
+        }
+      
+        .nav-link:before {
+          content: "";
+          position: absolute;
+          width: 100%;
+          height: 2px;
+          bottom: 0;
+          left: 0;
+          background-color: #666;
+          visibility: hidden;
+          transform: scaleX(0);
+          transition: all 0.3s ease-in-out 0s;
+        }
+      
+        .nav-link:hover:before {
+          visibility: visible;
+          transform: scaleX(1);
+        }
+      }
+      </style>
+      
+
+    <div class="heading">
+        <div class="left">
+            <div class="head">
+                <style>
+                    h1 {
+                       font-size: 65px;
+                    }
+                    h6 {
+                       font-size: 25px;
+                    }
+                   
+                    .typing {
+      border-right: 2px solid #f9f7f7;
+      white-space: nowrap;
+      overflow: hidden;
+      animation: typing 3s steps(30) forwards;
+      padding-left: 80px
+   }
+   
+   @keyframes typing {
+      0% {
+         width: 0;
+      }
+      100% {
+         width: 27ch;
+      }
+   }
+
+                 </style>
+                 <h1>INFOCLIPS</h1>
+                 <h6 class="typing">Learning Made Efficient... </h6>
+                 
+            </div>
+            
+            <div class="fo">
+                <form id="form1" action="/" method="POST" novalidate>
+
+                    {% csrf_token %}
+                    {{ form1 }}
+                    <div class="but">
+                        <input name="form1-submit" class="btn btn-primary" type="submit" value="Submit">
+                </form>
+                <input name="get" class="btn btn-primary" type="submit" value="Get Player">
+
+            </div>
+
+        </div>
+    </div>
+    <div id="player"></div>
+    </div>
+
+    <div class="sea">
+        <div class="fo">
+            <form id="form2" action="/" method="POST" class="ajax-form" novalidate>
+                {% csrf_token %}
+                {{ form2 }}
+                <input name="form2-submit" id="search-btn" class="btn btn-primary" type="submit" value="Search">
+            </form>
+        </div>
+        <div id="timestamps">
+            <ul id="times">
+                <a href="#"></a>
+            </ul>
+        </div>
+        <!-- <div id="times"></div> -->
+    </div>
+    <div id="search-results"></div>
+
+    <div class="bottom">
+        <form id="form3" action="/" method="POST" novalidate>
+            {% csrf_token %}
+            <input name="form3-submit" class="btn btn-secondary" type="submit" value="Summary">
+        </form>
+        <form id="form4" action="/" method="POST" novalidate>
+            {% csrf_token %}
+            <input name="form4-submit" class="btn btn-secondary" type="submit" value="Sentiment Analysis">
+        </form>
+    </div>
+
+
+    <div id="tot-output">
+        <div id="output"></div>
+        <div id="s-output"></div>
+    </div>
+
+    <script src="https://www.youtube.com/iframe_api"></script>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="{% static 'main.js' %}"></script>
+    <script>
+        $('#form2').on('submit', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'ajax_search' %}",
+                data: {
+                    id_search: $('#id_search').val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    dataType: "json",
+                },
+
+                success: function (data) {
+                    $('#timestamps').html("<ul id='times'><a href='#'></a></ul>");
+                    var msgList = data.msg;
+                    for (var i = 0; i < msgList.length; i++) {
+                        $('#times').append("<li><a href='javascript:seek(" + msgList[i] + ")'>" +
+                            msgList[i] + "</a></li>");
+                    }
+                    // $('#times').html(data.msg)
+                },
+                failure: function () {
+                    alert("Something is fishy");
+                }
+            });
+        });
+    </script>
+    <script>
+        $('#form3').on('submit', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'ajax_summary' %}",
+                data: {
+                    id_url: $('#id_url').val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    dataType: "json",
+                },
+
+                success: function (data) {
+                    $('#output').html('<h1>Summary</h1><br>'+data.msg)
+                },
+                failure: function () {
+                    alert("Something is fishy");
+                }
+            });
+        });
+    </script>
+    <script>
+        $('#form4').on('submit', function (e) {
+            e.preventDefault();
+
+            $.ajax({
+                type: "POST",
+                url: "{% url 'ajax_sentiment' %}",
+                data: {
+                    id_url: $('#id_url').val(),
+                    csrfmiddlewaretoken: '{{ csrf_token }}',
+                    dataType: "json",
+                },
+
+                success: function (data) {
+                    $('#s-output').html("<h1>" + data.label + "</h1><br><h1>" + data.score*100 + "</h1>")
+                },
+                failure: function () {
+                    alert("Something is fishy");
+                }
+            });
+        });
+    </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-qKXV1j0HvMUeCBQ+QVp7JcfGl760yU08IQ+GpUo5hlbpg51QRiuqHAJz8+BrxE/N" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.6/dist/umd/popper.min.js"
+        integrity="sha384-oBqDVmMz9ATKxIep9tiCxS/Z9fNfEXiDAYTujMAeBAsjFuCZSmKbSSUnQlmh/jp3" crossorigin="anonymous">
+    </script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha2/dist/js/bootstrap.min.js"
+        integrity="sha384-heAjqF+bCxXpCWLa6Zhcp4fu20XoNIA98ecBC1YkdXhszjoejr5y9Q77hIrv8R9i" crossorigin="anonymous">
+    </script>
+     <footer>
+        <p>Copyright &copy; 2023 INFOCLIPS</p>
+        <p>Contact me at <a href="mailto:ravisastrykolluru2021@gmail.com">ravisastrykolluru2021@gmail.com</a></p>
+      </footer>
+</body>
+
+</html>
